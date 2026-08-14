@@ -1,70 +1,53 @@
-// app/anime/page.tsx
-import HeroSlider from '../components/HeroSlider';
-import AnimeRow from '../components/AnimeRow';
-import AnimeCard from '../components/AnimeCard';
-import { getAnimeList, getTrendingAnime, getTopAnime, AnimeItem } from '../../lib/jikan'; // Import AnimeItem
-import Link from 'next/link';
+import Image from 'next/image';
 
-export default async function AnimePage() {
-  // Fetch multiple data sets in parallel
-  const [trending, topAllTime, mainList] = await Promise.all([
-    getTrendingAnime(),
-    getTopAnime(),
-    getAnimeList(1, 'airing.desc') // Latest Airing
-  ]);
-
+export default function AnimePage() {
   return (
-    <main className="min-h-screen bg-[#0f0f0f] text-white font-sans">
-      {/* 1. Hero Slider */}
-      <HeroSlider animeList={trending.slice(0, 5)} />
-
-      {/* 2. Trending Row */}
-      <AnimeRow title="Trending This Season" animeList={trending} />
-
-      {/* 3. Top Rated Row */}
-      <AnimeRow title="Top Rated Anime" animeList={topAllTime} />
-
-      {/* 4. Latest Airing Grid */}
-      <section className="py-8 px-4 md:px-8 bg-[#0a0a0a]">
-        <div className="max-w-[1600px] mx-auto">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl md:text-2xl font-bold text-white border-l-4 border-yellow-500 pl-3">
-              Latest Updates
-            </h2>
-            <Link href="/anime?sort=airing.desc" className="text-sm text-yellow-500 hover:text-yellow-400 font-medium">
-              See More
-            </Link>
-          </div>
-          
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-4">
-            {mainList.results.map((item: AnimeItem) => ( // Add type annotation here
-              <AnimeCard key={item.mal_id} {...item} />
-            ))}
+    <div className="min-h-screen bg-[#0f172a] text-white">
+      {/* 1. HERO SECTION */}
+      <div className="relative w-full h-[500px] overflow-hidden">
+        {/* Background Image with Overlay Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-transparent to-transparent z-10" />
+        <Image
+          src="https://images.unsplash.com/photo-1578632767115-3515977f39f7?q=80&w=2070&auto=format&fit=crop" 
+          alt="Featured Anime"
+          fill
+          className="object-cover"
+          priority
+        />
+        
+        {/* Hero Content */}
+        <div className="relative z-20 container mx-auto px-6 h-full flex flex-col justify-end pb-12">
+          <span className="text-blue-500 font-bold tracking-wider text-sm mb-2">TRENDING NOW</span>
+          <h1 className="text-4xl md:text-6xl font-extrabold mb-4 drop-shadow-lg">
+            Jujutsu Kaisen
+          </h1>
+          <p className="text-gray-300 max-w-2xl mb-6 text-lg">
+            In a world where cursed spirits feed on unsuspecting humans, hidden agent of the Jujutsu Society Satoru Gojou and his student Yuji Itadori battle powerful curses.
+          </p>
+          <div className="flex gap-4">
+            <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-bold transition flex items-center gap-2">
+              ▶ Watch S1
+            </button>
+            <button className="bg-gray-800/80 hover:bg-gray-700 text-white px-8 py-3 rounded-full font-bold transition backdrop-blur-sm">
+              + My List
+            </button>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* 5. Mobile Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-[#020209] border-t border-white/10 md:hidden z-50 pb-safe">
-        <div className="flex justify-around items-center h-16">
-          <Link href="/anime" className="flex flex-col items-center justify-center w-full h-full text-yellow-500">
-            <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-            <span className="text-[10px] uppercase font-medium">Home</span>
-          </Link>
-          <Link href="/anime?sort=popularity.desc" className="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-yellow-500">
-            <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M3 20h18" /></svg>
-            <span className="text-[10px] uppercase font-medium">Catalog</span>
-          </Link>
-          <Link href="/schedule" className="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-yellow-500">
-            <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-            <span className="text-[10px] uppercase font-medium">Schedule</span>
-          </Link>
-          <Link href="/search" className="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-yellow-500">
-            <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-            <span className="text-[10px] uppercase font-medium">Search</span>
-          </Link>
+      {/* 2. GENRE FILTER BAR */}
+      <div className="container mx-auto px-6 py-6">
+        <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide border-b border-gray-800">
+          {['All', 'Action', 'Adventure', 'Comedy', 'Drama', 'Fantasy', 'Horror', 'Isekai', 'Mecha', 'Romance', 'Sci-Fi', 'Slice of Life', 'Supernatural'].map((genre) => (
+            <button 
+              key={genre}
+              className="px-5 py-2 bg-gray-800 hover:bg-gray-700 rounded-full text-sm font-medium whitespace-nowrap transition border border-gray-700"
+            >
+              {genre}
+            </button>
+          ))}
         </div>
-      </nav>
-    </main>
+      </div>
+    </div>
   );
 }
