@@ -1,39 +1,18 @@
-import { NextRequest, NextResponse } from "next/server";
-import { searchMedia, searchAnime } from "@/lib/tmdb";
+import { NextResponse } from "next/server";
+import { getTrending } from "@/lib/tmdb";
 
-export async function GET(req: NextRequest) {
-  const type = req.nextUrl.searchParams.get("type");
-  const query = req.nextUrl.searchParams.get("q");
-  const page = parseInt(req.nextUrl.searchParams.get("page") || "1", 10);
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const kind = searchParams.get("kind") || "movie";
+  const page = parseInt(searchParams.get("page") || "1", 10);
+
+  // FIX: Explicitly cast or handle 'anime' here if your function signature is strict
+  const mediaKind = kind as "movie" | "tv" | "anime";
 
   try {
-    if (type === "anime") {
-      const data = await searchAnime({
-        type: "anime",
-        query: query || "",
-        genres: [],
-        yearFrom: 2000,
-        yearTo: 2026,
-        page,
-        language: "all",
-      });
-      return NextResponse.json(data);
-    }
-
-    // Default to movie/tv search
-    const data = await searchMedia({
-      type: (type as any) || "all",
-      query: query || "",
-      genres: [],
-      yearFrom: 2000,
-      yearTo: 2026,
-      page,
-      language: "all",
-    });
-    
+    const data = await getTrending(mediaKind, page);
     return NextResponse.json(data);
-  } catch (err) {
-    console.error(err);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to fetch media" }, { status: 500 });
   }
 }
