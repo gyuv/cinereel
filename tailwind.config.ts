@@ -22,6 +22,11 @@ const config: Config = {
           teal: "#34D0A8", // "Free" badge
           rose: "#E85B4B", // "Rent/Buy" badge / alerts
         },
+        // Added for Anime Page consistency
+        dark: {
+          bg: "#0f0f0f",
+          card: "#1a1a1a",
+        },
       },
       fontFamily: {
         display: ["var(--font-display)", "serif"],
@@ -34,6 +39,10 @@ const config: Config = {
       },
       letterSpacing: {
         stub: "0.22em",
+      },
+      aspectRatio: {
+        // Helper for anime/movie cards
+        card: "2 / 3",
       },
     },
   },
