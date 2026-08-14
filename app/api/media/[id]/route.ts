@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getMediaDetail } from "@/lib/tmdb";
+import { getMediaDetail, searchAnime } from "@/lib/tmdb";
 import type { MediaKind } from "@/types";
 
 export async function GET(
@@ -13,8 +13,9 @@ export async function GET(
   const kind = (req.nextUrl.searchParams.get("type") as MediaKind) ?? "movie";
   
   try {
-    // If the kind is 'anime', we can pass it directly to getMediaDetail
-    // Ensure your getMediaDetail function handles 'anime' by fetching from the correct source (e.g., TMDB TV with genre 16)
+    // If we want to support a list endpoint (e.g. /api/media?type=anime&page=1),
+    // we could add logic here. For now, we only support detail fetch by ID.
+    
     const data = await getMediaDetail(kind, Number(id));
     
     // Basic validation to ensure we got data
@@ -31,6 +32,3 @@ export async function GET(
     );
   }
 }
-
-// Optional: If you want to support fetching a list of anime (Trending, Popular), 
-// you can add a similar route at /api/media?type=anime&page=1
