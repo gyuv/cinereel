@@ -1,7 +1,7 @@
 import React from 'react';
-import HeroCarousel from '@/components/HeroCarousel';
-import GenreFilter from '@/components/GenreFilter';
-import MediaGrid from '@/components/MediaGrid';
+import HeroCarousel from '../components/HeroCarousel';
+import GenreFilter from '../components/GenreFilter';
+import MediaGrid from '../components/MediaGrid';
 
 const AnimePage = () => {
   return (
