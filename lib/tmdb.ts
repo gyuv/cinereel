@@ -1,17 +1,18 @@
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 
-// Ensure the function is exported with the exact name "getTrending"
-export async function getTrending() {
-  const response = await fetch(`${BASE_URL}/trending/all/day`, {
+// ... (keep your existing getTrending or other functions here)
+
+export async function getMediaDetail(mediaType: string, id: string) {
+  const response = await fetch(`${BASE_URL}/${mediaType}/${id}`, {
     headers: {
       accept: "application/json",
-      Authorization: `Bearer ${TMDB_API_KEY}`, // Or use ?api_key=${TMDB_API_KEY} if using query params
+      Authorization: `Bearer ${TMDB_API_KEY}`,
     },
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch trending data from TMDB");
+    throw new Error(`Failed to fetch details for ${mediaType} with ID ${id}`);
   }
 
   return response.json();
